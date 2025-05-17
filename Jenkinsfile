@@ -3,12 +3,7 @@ pipeline {
     stages {
         stage('Clonar') {
             steps {
-                git branch: 'main', url: 'https://github.com/Molina211/BakendJenkins.git'
-            }
-        }
-        stage('Permisos') {
-            steps {
-                sh 'chmod +x mvnw'
+                git branch: 'BackendJenkins', url: 'https://github.com/Molina211/programacion-movil-2025-a-g2.git'
             }
         }
         stage('Compilar') {
