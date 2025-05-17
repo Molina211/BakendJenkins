@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Clonar') {
             steps {
-                git branch: 'BackendJenkins', url: 'https://github.com/Molina211/programacion-movil-2025-a-g2.git'
+                git branch: 'main', url: 'https://github.com/Molina211/BakendJenkins.git'
             }
         }
         stage('Compilar') {
