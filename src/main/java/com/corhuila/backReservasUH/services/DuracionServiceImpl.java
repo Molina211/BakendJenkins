@@ -50,6 +50,12 @@ public class DuracionServiceImpl implements IDuracionService {
         }
 
         // Enviar correo de notificación al iniciar la reserva al usuario asociado
+        enviarCorreoInicioReserva(reserva, duracion);
+
+        return duracionRepository.save(duracion);
+    }
+
+    public void enviarCorreoInicioReserva(Reservas reserva, Duracion duracion) {
         try {
             String correoDestino = null;
             if (reserva.getUsuario() != null && reserva.getUsuario().getCorreo() != null) {
@@ -63,14 +69,13 @@ public class DuracionServiceImpl implements IDuracionService {
                 message.setTo(correoDestino);
                 message.setSubject("Inicio de Reserva");
                 message.setText(
-                        "La reserva con ID " + reservaId + " ha iniciado su tiempo a las " + fechaHoraFormateada + ".");
+                        "La reserva con ID " + reserva.getId() + " ha iniciado su tiempo a las " + fechaHoraFormateada
+                                + ".");
                 mailSender.send(message);
             }
         } catch (Exception e) {
             System.out.println("No se pudo enviar el correo de notificación: " + e.getMessage());
         }
-
-        return duracionRepository.save(duracion);
     }
 
     @Override

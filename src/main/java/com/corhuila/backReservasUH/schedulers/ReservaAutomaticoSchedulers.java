@@ -13,12 +13,13 @@ import com.corhuila.backReservasUH.models.Constantes;
 import com.corhuila.backReservasUH.models.Duracion;
 import com.corhuila.backReservasUH.repositories.IDuracionRepository;
 import com.corhuila.backReservasUH.repositories.IReservasRepository;
+import com.corhuila.backReservasUH.services.DuracionServiceImpl;
 import com.corhuila.backReservasUH.services.IDuracionService;
 
 @Component
 public class ReservaAutomaticoSchedulers {
 
-     @Autowired
+    @Autowired
     private IDuracionService duracionService;
 
     @Autowired
@@ -26,6 +27,9 @@ public class ReservaAutomaticoSchedulers {
 
     @Autowired
     private IDuracionRepository duracionRepository;
+
+    @Autowired
+    private DuracionServiceImpl duracionServiceImpl;
 
     private static final int TIEMPO_MAXIMO_MINUTOS = Constantes.TIEMPO_MAXIMO_MINUTOS;
 
@@ -84,7 +88,8 @@ public class ReservaAutomaticoSchedulers {
             // Iniciar el servicio solo cuando la fecha y hora actuales coincidan o hayan
             // pasado
             if (!yaIniciado && !ahora.isBefore(inicioTeorico)) {
-                duracionService.iniciarServicio(reserva.getId());
+                Duracion duracion = duracionService.iniciarServicio(reserva.getId());
+                duracionServiceImpl.enviarCorreoInicioReserva(reserva, duracion);
                 System.out
                         .println("[SCHEDULER] Servicio INICIADO automáticamente para reserva ID: " + reserva.getId());
             }
