@@ -3,14 +3,13 @@ package com.corhuila.backReservasUH.services;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.List;
-
+import java.time.format.DateTimeFormatter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-
 
 import com.corhuila.backReservasUH.models.Duracion;
 import com.corhuila.backReservasUH.models.Reservas;
@@ -22,7 +21,7 @@ import com.corhuila.backReservasUH.models.Salas;
 @Service
 public class DuracionServiceImpl implements IDuracionService {
 
-      @Autowired
+    @Autowired
     private IReservasRepository reservasRepository;
 
     @Autowired
@@ -57,10 +56,14 @@ public class DuracionServiceImpl implements IDuracionService {
                 correoDestino = reserva.getUsuario().getCorreo();
             }
             if (correoDestino != null) {
+                // Formatear fecha y hora en formato de 12 horas y fecha normal
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy hh:mm a");
+                String fechaHoraFormateada = duracion.getInicioServicio().format(formatter);
                 SimpleMailMessage message = new SimpleMailMessage();
                 message.setTo(correoDestino);
                 message.setSubject("Inicio de Reserva");
-                message.setText("La reserva con ID " + reservaId + " ha iniciado su tiempo a las " + duracion.getInicioServicio() + ".");
+                message.setText(
+                        "La reserva con ID " + reservaId + " ha iniciado su tiempo a las " + fechaHoraFormateada + ".");
                 mailSender.send(message);
             }
         } catch (Exception e) {
@@ -69,9 +72,8 @@ public class DuracionServiceImpl implements IDuracionService {
 
         return duracionRepository.save(duracion);
     }
-    
 
-     @Override
+    @Override
     public Duracion finalizarServicio(Long reservaId, boolean esManual) {
         Reservas reserva = reservasRepository.findById(reservaId)
                 .orElseThrow(() -> new RuntimeException("Reserva no encontrada"));
@@ -109,7 +111,8 @@ public class DuracionServiceImpl implements IDuracionService {
             duracion.setEstado("Terminada");
         }
 
-        // Desasociar la sala y ponerla en estado 'Activa' si la reserva terminó (manual o automática)
+        // Desasociar la sala y ponerla en estado 'Activa' si la reserva terminó (manual
+        // o automática)
         if ("Terminada".equalsIgnoreCase(reserva.getEstado()) && reserva.getSalas() != null) {
             Salas sala = reserva.getSalas();
             sala.setEstado("Activa");
@@ -117,7 +120,8 @@ public class DuracionServiceImpl implements IDuracionService {
             reserva.setSalas(null);
             reservasRepository.save(reserva);
         }
-        // Cambiar el estado de la duración a 'Terminada' si la reserva terminó automáticamente
+        // Cambiar el estado de la duración a 'Terminada' si la reserva terminó
+        // automáticamente
         if ("Terminada".equalsIgnoreCase(reserva.getEstado())) {
             duracion.setEstado("Terminada");
             duracionRepository.save(duracion);
@@ -142,4 +146,3 @@ public class DuracionServiceImpl implements IDuracionService {
         return duracionRepository.findAll();
     }
 }
-
