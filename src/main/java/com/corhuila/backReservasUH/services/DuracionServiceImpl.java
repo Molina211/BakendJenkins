@@ -53,9 +53,7 @@ public class DuracionServiceImpl implements IDuracionService {
             duracion.setEstado("Reservada");
         }
 
-        // Enviar correo de notificación al iniciar la reserva al usuario asociado
-        enviarCorreoInicioReserva(reserva, duracion);
-
+        // El correo se enviará solo desde el scheduler para evitar bucles
         return duracionRepository.save(duracion);
     }
 
@@ -91,10 +89,8 @@ public class DuracionServiceImpl implements IDuracionService {
                 .orElseThrow(() -> new RuntimeException("Duración no iniciada"));
 
         LocalDateTime ahora = LocalDateTime.now();
-        LocalDateTime finServicioAutomatico = duracion.getFinServicio();
 
         if (!esManual) {
-            finServicioAutomatico = ahora;
             duracion.setFinServicio(ahora);
         }
 

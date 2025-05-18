@@ -89,6 +89,7 @@ public class ReservaAutomaticoSchedulers {
             // pasado
             if (!yaIniciado && !ahora.isBefore(inicioTeorico)) {
                 Duracion duracion = duracionService.iniciarServicio(reserva.getId());
+                // Solo enviar el correo aquí, no dentro de iniciarServicio para evitar bucle
                 duracionServiceImpl.enviarCorreoInicioReserva(reserva, duracion);
                 System.out
                         .println("[SCHEDULER] Servicio INICIADO automáticamente para reserva ID: " + reserva.getId());
