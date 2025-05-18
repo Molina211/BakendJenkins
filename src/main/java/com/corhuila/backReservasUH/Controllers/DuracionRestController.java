@@ -15,15 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.corhuila.backReservasUH.models.Duracion;
 import com.corhuila.backReservasUH.services.IDuracionService;
 
-@CrossOrigin(origins = { "http://localhost:4200" })
+@CrossOrigin(origins = { "http://localhost:8100" })
 @RestController
 @RequestMapping("/api")
 public class DuracionRestController {
 
-    
     @Autowired
     private IDuracionService duracionService;
-
 
     @PostMapping("/{reservaId}/finalizar")
     public ResponseEntity<Duracion> finalizar(@PathVariable Long reservaId) {
