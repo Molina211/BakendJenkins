@@ -1,6 +1,7 @@
 package com.corhuila.backReservasUH.services;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Optional;
 import java.util.List;
 import java.time.format.DateTimeFormatter;
@@ -42,7 +43,10 @@ public class DuracionServiceImpl implements IDuracionService {
                 .orElse(new Duracion());
 
         duracion.setReservas(reserva);
-        duracion.setInicioServicio(LocalDateTime.now());
+
+        // Usar la zona horaria de Colombia
+        LocalDateTime inicioColombia = LocalDateTime.now(ZoneId.of("America/Bogota"));
+        duracion.setInicioServicio(inicioColombia);
 
         // Si la reserva está en estado "Reservado" y no se ha iniciado automáticamente
         if ("Reservada".equals(reserva.getEstado())) {
