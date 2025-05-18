@@ -35,7 +35,8 @@ public class ReservaAutomaticoSchedulers {
 
     @Scheduled(fixedRate = 1000) // Ejecutar cada segundo
     public void verificarReservas() {
-        LocalDateTime ahora = LocalDateTime.now();
+        // Usar la hora de Colombia (America/Bogota) para toda la lógica del scheduler
+        LocalDateTime ahora = LocalDateTime.now(java.time.ZoneId.of("America/Bogota"));
         String horaActual = ahora.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
         System.out.println("[SCHEDULER] Verificando reservas a las: " + horaActual);
 
@@ -81,6 +82,8 @@ public class ReservaAutomaticoSchedulers {
                     duracionService.findByReservaId(reserva.getId()).ifPresent(duracion -> {
                         duracion.setEstado("En uso");
                         duracionRepository.save(duracion);
+                        // Enviar correo solo cuando cambia a 'En uso'
+                        duracionServiceImpl.enviarCorreoInicioReserva(reserva, duracion);
                     });
                 }
             }
@@ -88,9 +91,7 @@ public class ReservaAutomaticoSchedulers {
             // Iniciar el servicio solo cuando la fecha y hora actuales coincidan o hayan
             // pasado
             if (!yaIniciado && !ahora.isBefore(inicioTeorico)) {
-                Duracion duracion = duracionService.iniciarServicio(reserva.getId());
-                // Solo enviar el correo aquí, no dentro de iniciarServicio para evitar bucle
-                duracionServiceImpl.enviarCorreoInicioReserva(reserva, duracion);
+                duracionService.iniciarServicio(reserva.getId());
                 System.out
                         .println("[SCHEDULER] Servicio INICIADO automáticamente para reserva ID: " + reserva.getId());
             }
