@@ -88,7 +88,12 @@ public class DuracionServiceImpl implements IDuracionService {
         Duracion duracion = duracionRepository.findByReservasId(reservaId)
                 .orElseThrow(() -> new RuntimeException("Duración no iniciada"));
 
-        LocalDateTime ahora = LocalDateTime.now();
+        LocalDateTime ahora = LocalDateTime.now(ZoneId.of("America/Bogota"));
+        // Calcular y guardar la diferencia de tiempo en minutos si hay inicio y fin
+        if (duracion.getInicioServicio() != null) {
+            long segundos = java.time.Duration.between(duracion.getInicioServicio(), ahora).toSeconds();
+            duracion.setTiempoSala(segundos);
+        }
 
         if (!esManual) {
             duracion.setFinServicio(ahora);

@@ -16,71 +16,79 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "duraciones")
-public class Duracion implements Serializable{
+public class Duracion implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    @Id
-    @Column(nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @Column(nullable = false)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-      @ManyToOne
-    @JoinColumn(name = "reserva_id", referencedColumnName = "id")
-    private Reservas reservas;
+  @ManyToOne
+  @JoinColumn(name = "reserva_id", referencedColumnName = "id")
+  private Reservas reservas;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Column(name = "inicio_servicio")
-    private LocalDateTime inicioServicio;
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  @Column(name = "inicio_servicio")
+  private LocalDateTime inicioServicio;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Column(name = "fin_servicio")
-    private LocalDateTime finServicio;
+  @Column(name = "tiempo_sala")
+  private Long tiempoSala;
 
-    @Column(name = "estado")
-    private String estado;
-    
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  @Column(name = "fin_servicio")
+  private LocalDateTime finServicio;
 
-     public Long getId() {
-        return id;
-      }
+  @Column(name = "estado")
+  private String estado;
 
-      public void setId(Long id) {
-        this.id = id;
-      }
+  public Long getId() {
+    return id;
+  }
 
-      public Reservas getReservas() {
-        return reservas;
-      }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-      public void setReservas(Reservas reservas) {
-        this.reservas = reservas;
-      }
+  public Reservas getReservas() {
+    return reservas;
+  }
 
-      public LocalDateTime getInicioServicio() {
-        return inicioServicio;
-      }
+  public void setReservas(Reservas reservas) {
+    this.reservas = reservas;
+  }
 
-      public void setInicioServicio(LocalDateTime inicioServicio) {
-        this.inicioServicio = inicioServicio;
-      }
+  public LocalDateTime getInicioServicio() {
+    return inicioServicio;
+  }
 
-      public LocalDateTime getFinServicio() {
-        return finServicio;
-      }
+  public void setInicioServicio(LocalDateTime inicioServicio) {
+    this.inicioServicio = inicioServicio;
+  }
 
-      public void setFinServicio(LocalDateTime finServicio) {
-        this.finServicio = finServicio;
-      }
+  public Long getTiempoSala() {
+    return tiempoSala;
+  }
 
-      public String getEstado() {
-        return estado;
-      }
+  public void setTiempoSala(Long tiempoSala) {
+    this.tiempoSala = tiempoSala;
+  }
 
-      public void setEstado(String estado) {
-        this.estado = estado;
-      }
+  public LocalDateTime getFinServicio() {
+    return finServicio;
+  }
 
-    
+  public void setFinServicio(LocalDateTime finServicio) {
+    this.finServicio = finServicio;
+  }
+
+  public String getEstado() {
+    return estado;
+  }
+
+  public void setEstado(String estado) {
+    this.estado = estado;
+  }
 
 }
