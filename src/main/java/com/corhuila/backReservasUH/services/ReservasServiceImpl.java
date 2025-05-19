@@ -41,6 +41,14 @@ public class ReservasServiceImpl implements IReservasService {
             res.setMotivo(reserva.getMotivo());
             res.setFecha(reserva.getFecha());
             res.setEstado(reserva.getEstado());
+            // Update associated room (salas) if provided
+            if (reserva.getSalas() != null) {
+                res.setSalas(reserva.getSalas());
+            }
+            // Update associated user (usuario) if provided
+            if (reserva.getUsuario() != null) {
+                res.setUsuario(reserva.getUsuario());
+            }
             repository.save(res);
         } else {
             System.out.println("Reserva no encontrada");
