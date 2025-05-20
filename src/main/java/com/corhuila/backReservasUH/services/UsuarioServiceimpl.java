@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.corhuila.backReservasUH.models.Usuario;
 import com.corhuila.backReservasUH.repositories.IUsuarioRepository;
+import com.corhuila.backReservasUH.repositories.IReservasRepository;
+import com.corhuila.backReservasUH.models.Reservas;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,9 @@ public class UsuarioServiceimpl implements IUsuarioService {
 
     @Autowired
     private JavaMailSender mailSender;
+
+    @Autowired
+    private IReservasRepository reservasRepository;
 
     private final Map<String, String> codigosPorCorreo = new HashMap<>();
 
@@ -105,6 +110,16 @@ public class UsuarioServiceimpl implements IUsuarioService {
     @Override
     @Transactional
     public void delete(Long id) {
+        // Eliminar todas las reservas asociadas al usuario antes de eliminar el usuario
+        List<Reservas> reservas = new java.util.ArrayList<>();
+        reservasRepository.findAll().forEach(reserva -> {
+            if (reserva.getUsuario() != null && reserva.getUsuario().getId().equals(id)) {
+                reservas.add(reserva);
+            }
+        });
+        for (Reservas reserva : reservas) {
+            reservasRepository.deleteById(reserva.getId());
+        }
         usuarioRepository.deleteById(id);
     }
 

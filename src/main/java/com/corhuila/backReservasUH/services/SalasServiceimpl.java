@@ -7,13 +7,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.corhuila.backReservasUH.models.Salas;
+import com.corhuila.backReservasUH.models.Reservas;
 import com.corhuila.backReservasUH.repositories.ISalasRepository;
+import com.corhuila.backReservasUH.repositories.IReservasRepository;
 
 @Service
 public class SalasServiceimpl implements ISalasService {
 
     @Autowired
     private ISalasRepository salasRepository;
+
+    @Autowired
+    private IReservasRepository reservasRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -40,6 +45,16 @@ public class SalasServiceimpl implements ISalasService {
     @Override
     @Transactional
     public void delete(Long id) {
+        // Eliminar todas las reservas asociadas a la sala antes de eliminar la sala
+        List<Reservas> reservas = new java.util.ArrayList<>();
+        reservasRepository.findAll().forEach(reserva -> {
+            if (reserva.getSalas() != null && reserva.getSalas().getId().equals(id)) {
+                reservas.add(reserva);
+            }
+        });
+        for (Reservas reserva : reservas) {
+            reservasRepository.deleteById(reserva.getId());
+        }
         salasRepository.deleteById(id);
     }
 
