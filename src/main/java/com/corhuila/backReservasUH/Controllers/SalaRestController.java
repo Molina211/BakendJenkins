@@ -17,15 +17,15 @@ import org.springframework.web.bind.annotation.RestController;
 import com.corhuila.backReservasUH.models.Salas;
 import com.corhuila.backReservasUH.services.ISalasService;
 
-@CrossOrigin(origins = { "http://localhost:8100" })
+@CrossOrigin(origins = { "*" })
 @RestController
 @RequestMapping("/api")
 public class SalaRestController {
 
-     @Autowired
-     ISalasService salasService;
+    @Autowired
+    ISalasService salasService;
 
-      @GetMapping("/salas")
+    @GetMapping("/salas")
     public List<Salas> listarVehiculos() {
         return salasService.findAll();
     }
@@ -46,6 +46,5 @@ public class SalaRestController {
     public void eliminarVehiculo(@PathVariable Long id) {
         salasService.delete(id);
     }
-
 
 }

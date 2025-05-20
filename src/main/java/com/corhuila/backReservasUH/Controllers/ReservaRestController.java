@@ -18,28 +18,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.corhuila.backReservasUH.models.Reservas; 
+import com.corhuila.backReservasUH.models.Reservas;
 import com.corhuila.backReservasUH.services.IReservasService;
 import com.corhuila.backReservasUH.repositories.ISalasRepository;
 import com.corhuila.backReservasUH.models.Salas;
 import com.corhuila.backReservasUH.repositories.IReservasRepository;
 import java.util.Arrays;
 
-@CrossOrigin(origins = { "http://localhost:8100" })
+@CrossOrigin(origins = { "*" })
 @RestController
 @RequestMapping("/api/")
 public class ReservaRestController {
 
- @Autowired
+    @Autowired
     private IReservasService reservaService;
- 
- @Autowired
- private ISalasRepository salasRepository;
- 
- @Autowired
-private IReservasRepository reservasRepository;
 
-     
+    @Autowired
+    private ISalasRepository salasRepository;
+
+    @Autowired
+    private IReservasRepository reservasRepository;
 
     @GetMapping("/reservas")
     public List<Reservas> listarReservas() {
@@ -59,7 +57,8 @@ private IReservasRepository reservasRepository;
     @PostMapping("/reservas")
     public ResponseEntity<?> registrarReserva(@RequestBody Reservas reserva) {
         try {
-            // Si la reserva tiene una sala asociada, buscar la sala completa y actualizar su estado
+            // Si la reserva tiene una sala asociada, buscar la sala completa y actualizar
+            // su estado
             if (reserva.getSalas() != null && reserva.getSalas().getId() != null) {
                 Salas sala = salasRepository.findById(reserva.getSalas().getId()).orElse(null);
                 if (sala == null) {
@@ -67,8 +66,7 @@ private IReservasRepository reservasRepository;
                 }
                 // Verificar si la sala ya está asociada a una reserva activa
                 var reservasActivas = reservasRepository.findBySalasIdAndEstadoIn(
-                    sala.getId(), Arrays.asList("Reservada", "En uso", "Ocupada")
-                );
+                        sala.getId(), Arrays.asList("Reservada", "En uso", "Ocupada"));
                 if (!reservasActivas.isEmpty()) {
                     return ResponseEntity.status(HttpStatus.CONFLICT).body("La sala ya está reservada o en uso");
                 }
