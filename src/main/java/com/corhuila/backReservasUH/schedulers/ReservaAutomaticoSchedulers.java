@@ -41,6 +41,15 @@ public class ReservaAutomaticoSchedulers {
         System.out.println("[SCHEDULER] Verificando reservas a las: " + horaActual);
 
         reservasRepository.findAll().forEach(reserva -> {
+            // Si la reserva está cancelada, desasociar la sala y no procesar más
+            if ("Cancelada".equalsIgnoreCase(reserva.getEstado())) {
+                if (reserva.getSalas() != null) {
+                    reserva.getSalas().setEstado("Activa");
+                    reservasRepository.save(reserva);
+                }
+                return;
+            }
+
             LocalDate fechaReserva = reserva.getFecha();
             LocalTime horaReserva = reserva.getHora();
             if (fechaReserva == null || horaReserva == null) {

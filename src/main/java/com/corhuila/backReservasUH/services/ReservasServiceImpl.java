@@ -83,6 +83,12 @@ public class ReservasServiceImpl implements IReservasService {
         if (reservaOpt.isPresent()) {
             Reservas reserva = reservaOpt.get();
             reserva.actualizarEstado(nuevoEstado);
+            // Si se cancela, desasociar la sala y ponerla en 'Activa'
+            if ("Cancelada".equalsIgnoreCase(nuevoEstado) && reserva.getSalas() != null) {
+                reserva.getSalas().setEstado("Activa");
+                salasRepository.save(reserva.getSalas());
+                reserva.setSalas(null);
+            }
             repository.save(reserva);
         } else {
             throw new RuntimeException("Reserva no encontrada");
