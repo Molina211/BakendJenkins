@@ -24,7 +24,7 @@ import com.corhuila.backReservasUH.models.LoginRequest;
 import com.corhuila.backReservasUH.models.Usuario;
 import com.corhuila.backReservasUH.services.IUsuarioService;
 
-@CrossOrigin(origins = "http://localhost:8100")
+@CrossOrigin(origins = "http://localhost")
 @RestController
 @RequestMapping("/api")
 public class UsuarioRestController {

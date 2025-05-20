@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.corhuila.backReservasUH.models.Duracion;
 import com.corhuila.backReservasUH.services.IDuracionService;
 
-@CrossOrigin(origins = { "http://localhost:8100" })
+@CrossOrigin(origins = { "http://localhost" })
 @RestController
 @RequestMapping("/api")
 public class DuracionRestController {
