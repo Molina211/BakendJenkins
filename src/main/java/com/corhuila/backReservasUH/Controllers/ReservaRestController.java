@@ -25,7 +25,7 @@ import com.corhuila.backReservasUH.models.Salas;
 import com.corhuila.backReservasUH.repositories.IReservasRepository;
 import java.util.Arrays;
 
-@CrossOrigin(origins = { "http://localhost" })
+@CrossOrigin(origins = { "https://localhost" })
 @RestController
 @RequestMapping("/api")
 public class ReservaRestController {

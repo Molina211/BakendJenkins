@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.corhuila.backReservasUH.models.Salas;
 import com.corhuila.backReservasUH.services.ISalasService;
 
-@CrossOrigin(origins = { "http://localhost" })
+@CrossOrigin(origins = { "https://localhost" })
 @RestController
 @RequestMapping("/api")
 public class SalaRestController {
