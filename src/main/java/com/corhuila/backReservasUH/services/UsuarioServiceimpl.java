@@ -7,7 +7,6 @@ import java.util.Optional;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -85,15 +84,36 @@ public class UsuarioServiceimpl implements IUsuarioService {
         // Guardar el código en el mapa (correo -> código)
         codigosPorCorreo.put(correo, nuevoCodigo);
 
-        // Crear el mensaje de correo
-        SimpleMailMessage mensaje = new SimpleMailMessage();
-        mensaje.setTo(correo);
-        mensaje.setSubject("Código de verificación de cuenta");
-        mensaje.setText("Tu nuevo código de verificación es: " + nuevoCodigo);
-
-        // Enviar el correo
-        mailSender.send(mensaje);
-
+        // PLANTILLA HTML PERSONALIZADA
+        String subject = "Código de verificación de cuenta";
+        String htmlMessage = "<html>"
+                + "<body style=\"font-family: Arial, sans-serif; background: #ffffff; margin:0; padding:0;\">"
+                + "<div style=\"background: #000000;\">"
+                + "<svg viewBox='0 0 1440 150' preserveAspectRatio='none' xmlns='http://www.w3.org/2000/svg' style='display:block;'><style>.animated-path{animation:waveAnim 10s linear infinite;}@keyframes waveAnim{0%{d:path('M0,75 C480,0 960,150 1440,75 L1440,0 L0,0 Z');}20%{d:path('M0,75 C400,100 1040,0 1440,75 L1440,0 L0,0 Z');}40%{d:path('M0,75 C500,150 940,0 1440,75 L1440,0 L0,0 Z');}60%{d:path('M0,75 C580,0 860,150 1440,75 L1440,0 L0,0 Z');}80%{d:path('M0,75 C200,0 960,150 1440,75 L1440,0 L0,0 Z');}100%{d:path('M0,75 C480,0 960,150 1440,75 L1440,0 L0,0 Z');}}</style><path d='M0,75 C480,0 960,150 1440,75 L1440,0 L0,0 Z' fill='#01963f' class='animated-path'/></svg>"
+                + "</div>"
+                + "<div style=\"padding: 32px 16px 16px 16px; background: #ffffff; border-radius: 0 0 12px 12px; box-shadow: 0 2px 8px rgba(1,150,63,0.08); max-width: 480px; margin: 0 auto;\">"
+                + "<h2 style=\"color: #01963f;\">¡Bienvenido a nuestra app!</h2>"
+                + "<p style=\"font-size: 16px; color: #000000;\">Por favor, ingresa el siguiente código de verificación para continuar:</p>"
+                + "<div style=\"background: #01963f; color: #ffffff; padding: 20px; border-radius: 8px; margin: 24px 0; text-align: center; font-size: 24px; font-weight: bold; letter-spacing: 2px;\">"
+                + nuevoCodigo
+                + "</div>"
+                + "</div>"
+                + "<div style=\"background: #000000;\">"
+                + "<svg viewBox='0 0 1440 150' preserveAspectRatio='none' xmlns='http://www.w3.org/2000/svg' style='display:block;'><style>.animated-path2{animation:waveBottomAnim 10s linear infinite;}@keyframes waveBottomAnim{0%{d:path('M0,75 C480,0 960,150 1440,75 L1440,150 L0,150 Z');}20%{d:path('M0,75 C400,100 1040,0 1440,75 L1440,150 L0,150 Z');}40%{d:path('M0,75 C500,150 940,0 1440,75 L1440,150 L0,150 Z');}60%{d:path('M0,75 C580,0 860,150 1440,75 L1440,150 L0,150 Z');}80%{d:path('M0,75 C200,0 960,150 1440,75 L1440,150 L0,150 Z');}100%{d:path('M0,75 C480,0 960,150 1440,75 L1440,150 L0,150 Z');}}</style><path d='M0,75 C480,0 960,150 1440,75 L1440,150 L0,150 Z' fill='#01963f' class='animated-path2'/></svg>"
+                + "</div>"
+                + "</body>"
+                + "</html>";
+        try {
+            jakarta.mail.internet.MimeMessage mimeMessage = mailSender.createMimeMessage();
+            org.springframework.mail.javamail.MimeMessageHelper helper = new org.springframework.mail.javamail.MimeMessageHelper(
+                    mimeMessage, true, "UTF-8");
+            helper.setTo(correo);
+            helper.setSubject(subject);
+            helper.setText(htmlMessage, true);
+            mailSender.send(mimeMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return nuevoCodigo;
     }
 
