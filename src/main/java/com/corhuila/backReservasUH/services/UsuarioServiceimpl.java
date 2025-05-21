@@ -84,12 +84,12 @@ public class UsuarioServiceimpl implements IUsuarioService {
         // Guardar el código en el mapa (correo -> código)
         codigosPorCorreo.put(correo, nuevoCodigo);
 
-        // PLANTILLA HTML PERSONALIZADA
+        // PLANTILLA HTML PERSONALIZADA SOLO SVG ESTÁTICO Y ESTILOS INLINE
         String subject = "Código de verificación de cuenta";
         String htmlMessage = "<html>"
                 + "<body style=\"font-family: Arial, sans-serif; background: #ffffff; margin:0; padding:0;\">"
                 + "<div style=\"background: #000000;\">"
-                + "<svg viewBox='0 0 1440 150' preserveAspectRatio='none' xmlns='http://www.w3.org/2000/svg' style='display:block;'><style>.animated-path{animation:waveAnim 10s linear infinite;}@keyframes waveAnim{0%{d:path('M0,75 C480,0 960,150 1440,75 L1440,0 L0,0 Z');}20%{d:path('M0,75 C400,100 1040,0 1440,75 L1440,0 L0,0 Z');}40%{d:path('M0,75 C500,150 940,0 1440,75 L1440,0 L0,0 Z');}60%{d:path('M0,75 C580,0 860,150 1440,75 L1440,0 L0,0 Z');}80%{d:path('M0,75 C200,0 960,150 1440,75 L1440,0 L0,0 Z');}100%{d:path('M0,75 C480,0 960,150 1440,75 L1440,0 L0,0 Z');}}</style><path d='M0,75 C480,0 960,150 1440,75 L1440,0 L0,0 Z' fill='#01963f' class='animated-path'/></svg>"
+                + "<svg viewBox='0 0 1440 150' preserveAspectRatio='none' xmlns='http://www.w3.org/2000/svg' style='display:block;'><path d='M0,75 C480,0 960,150 1440,75 L1440,0 L0,0 Z' fill='#01963f'/></svg>"
                 + "</div>"
                 + "<div style=\"padding: 32px 16px 16px 16px; background: #ffffff; border-radius: 0 0 12px 12px; box-shadow: 0 2px 8px rgba(1,150,63,0.08); max-width: 480px; margin: 0 auto;\">"
                 + "<h2 style=\"color: #01963f;\">¡Bienvenido a nuestra app!</h2>"
@@ -99,7 +99,7 @@ public class UsuarioServiceimpl implements IUsuarioService {
                 + "</div>"
                 + "</div>"
                 + "<div style=\"background: #000000;\">"
-                + "<svg viewBox='0 0 1440 150' preserveAspectRatio='none' xmlns='http://www.w3.org/2000/svg' style='display:block;'><style>.animated-path2{animation:waveBottomAnim 10s linear infinite;}@keyframes waveBottomAnim{0%{d:path('M0,75 C480,0 960,150 1440,75 L1440,150 L0,150 Z');}20%{d:path('M0,75 C400,100 1040,0 1440,75 L1440,150 L0,150 Z');}40%{d:path('M0,75 C500,150 940,0 1440,75 L1440,150 L0,150 Z');}60%{d:path('M0,75 C580,0 860,150 1440,75 L1440,150 L0,150 Z');}80%{d:path('M0,75 C200,0 960,150 1440,75 L1440,150 L0,150 Z');}100%{d:path('M0,75 C480,0 960,150 1440,75 L1440,150 L0,150 Z');}}</style><path d='M0,75 C480,0 960,150 1440,75 L1440,150 L0,150 Z' fill='#01963f' class='animated-path2'/></svg>"
+                + "<svg viewBox='0 0 1440 150' preserveAspectRatio='none' xmlns='http://www.w3.org/2000/svg' style='display:block;'><path d='M0,75 C480,0 960,150 1440,75 L1440,150 L0,150 Z' fill='#01963f'/></svg>"
                 + "</div>"
                 + "</body>"
                 + "</html>";

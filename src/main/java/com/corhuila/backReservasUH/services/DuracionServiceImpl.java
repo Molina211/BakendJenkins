@@ -9,7 +9,6 @@ import java.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 
 import com.corhuila.backReservasUH.models.Duracion;
@@ -64,16 +63,34 @@ public class DuracionServiceImpl implements IDuracionService {
                 correoDestino = reserva.getUsuario().getCorreo();
             }
             if (correoDestino != null) {
-                // Formatear fecha y hora en formato de 12 horas y fecha normal
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy hh:mm a");
                 String fechaHoraFormateada = duracion.getInicioServicio().format(formatter);
-                SimpleMailMessage message = new SimpleMailMessage();
-                message.setTo(correoDestino);
-                message.setSubject("Inicio de Reserva");
-                message.setText(
-                        "La reserva con ID " + reserva.getId() + " ha iniciado su tiempo a las " + fechaHoraFormateada
-                                + ".");
-                mailSender.send(message);
+                String subject = "Inicio de Reserva";
+                String htmlMessage = "<html>"
+                        + "<body style=\"font-family: Arial, sans-serif; background: #ffffff; margin:0; padding:0;\">"
+                        + "<div style=\"background: #000000;\">"
+                        + "<svg viewBox='0 0 1440 150' preserveAspectRatio='none' xmlns='http://www.w3.org/2000/svg' style='display:block;'><style>.animated-path{animation:waveAnim 10s linear infinite;}@keyframes waveAnim{0%{d:path('M0,75 C480,0 960,150 1440,75 L1440,0 L0,0 Z');}20%{d:path('M0,75 C400,100 1040,0 1440,75 L1440,0 L0,0 Z');}40%{d:path('M0,75 C500,150 940,0 1440,75 L1440,0 L0,0 Z');}60%{d:path('M0,75 C580,0 860,150 1440,75 L1440,0 L0,0 Z');}80%{d:path('M0,75 C200,0 960,150 1440,75 L1440,0 L0,0 Z');}100%{d:path('M0,75 C480,0 960,150 1440,75 L1440,0 L0,0 Z');}}</style><path d='M0,75 C480,0 960,150 1440,75 L1440,0 L0,0 Z' fill='#01963f' class='animated-path'/></svg>"
+                        + "</div>"
+                        + "<div style=\"padding: 32px 16px 16px 16px; background: #ffffff; border-radius: 0 0 12px 12px; box-shadow: 0 2px 8px rgba(1,150,63,0.08); max-width: 480px; margin: 0 auto;\">"
+                        + "<h2 style=\"color: #01963f;\">¡Tu reserva ha iniciado!</h2>"
+                        + "<p style=\"font-size: 16px; color: #000000;\">La reserva con ID <b>" + reserva.getId()
+                        + "</b> ha iniciado su tiempo a las <b>" + fechaHoraFormateada + "</b>.</p>"
+                        + "<div style=\"background: #01963f; color: #ffffff; padding: 20px; border-radius: 8px; margin: 24px 0; text-align: center; font-size: 20px; font-weight: bold; letter-spacing: 2px;\">"
+                        + "Reserva ID: " + reserva.getId()
+                        + "</div>"
+                        + "</div>"
+                        + "<div style=\"background: #000000;\">"
+                        + "<svg viewBox='0 0 1440 150' preserveAspectRatio='none' xmlns='http://www.w3.org/2000/svg' style='display:block;'><style>.animated-path2{animation:waveBottomAnim 10s linear infinite;}@keyframes waveBottomAnim{0%{d:path('M0,75 C480,0 960,150 1440,75 L1440,150 L0,150 Z');}20%{d:path('M0,75 C400,100 1040,0 1440,75 L1440,150 L0,150 Z');}40%{d:path('M0,75 C500,150 940,0 1440,75 L1440,150 L0,150 Z');}60%{d:path('M0,75 C580,0 860,150 1440,75 L1440,150 L0,150 Z');}80%{d:path('M0,75 C200,0 960,150 1440,75 L1440,150 L0,150 Z');}100%{d:path('M0,75 C480,0 960,150 1440,75 L1440,150 L0,150 Z');}}</style><path d='M0,75 C480,0 960,150 1440,75 L1440,150 L0,150 Z' fill='#01963f' class='animated-path2'/></svg>"
+                        + "</div>"
+                        + "</body>"
+                        + "</html>";
+                jakarta.mail.internet.MimeMessage mimeMessage = mailSender.createMimeMessage();
+                org.springframework.mail.javamail.MimeMessageHelper helper = new org.springframework.mail.javamail.MimeMessageHelper(
+                        mimeMessage, true, "UTF-8");
+                helper.setTo(correoDestino);
+                helper.setSubject(subject);
+                helper.setText(htmlMessage, true);
+                mailSender.send(mimeMessage);
             }
         } catch (Exception e) {
             System.out.println("No se pudo enviar el correo de notificación: " + e.getMessage());
