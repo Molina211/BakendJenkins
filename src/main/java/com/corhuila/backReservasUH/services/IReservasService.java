@@ -17,9 +17,8 @@ public interface IReservasService {
 
     public void delete(Long id);
 
- List<Reservas> findByEstado(String estado);
+    List<Reservas> findByEstado(String estado);
 
     void actualizarEstadoReserva(Long reservaId, String nuevoEstado);
-
 
 }

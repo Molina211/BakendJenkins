@@ -20,8 +20,7 @@ import jakarta.persistence.Table;
 @Table(name = "reservas")
 public class Reservas implements Serializable {
 
-
- private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     @Id
     @Column(nullable = false)
@@ -34,7 +33,6 @@ public class Reservas implements Serializable {
     @Column(name = "motivo", length = 100)
     private String motivo;
 
-
     @Column(name = "fecha")
     private LocalDate fecha;
 
@@ -44,7 +42,7 @@ public class Reservas implements Serializable {
     @Column(name = "estado")
     private String estado;
 
-     @ManyToOne
+    @ManyToOne
     @JoinColumn(name = "salas_id", referencedColumnName = "id")
     private Salas salas;
 
@@ -119,17 +117,15 @@ public class Reservas implements Serializable {
         this.usuario = usuario;
     }
 
-     public boolean isEstadoValido() {
+    public boolean isEstadoValido() {
         return "Terminada".equalsIgnoreCase(estado) ||
                 "En uso".equalsIgnoreCase(estado) ||
                 "Reservada".equalsIgnoreCase(estado) ||
                 "Cancelada".equalsIgnoreCase(estado);
     }
 
-     public void actualizarEstado(String nuevoEstado) {
+    public void actualizarEstado(String nuevoEstado) {
         this.estado = nuevoEstado;
     }
-
-
 
 }

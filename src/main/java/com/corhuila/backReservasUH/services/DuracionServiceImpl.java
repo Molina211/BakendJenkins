@@ -122,8 +122,9 @@ public class DuracionServiceImpl implements IDuracionService {
         }
 
         // Desasociar la sala y ponerla en estado 'Activa' si la reserva terminó (manual
-        // o automática)
-        if ("Terminada".equalsIgnoreCase(reserva.getEstado()) && reserva.getSalas() != null) {
+        // o automática) o fue cancelada
+        if (("Terminada".equalsIgnoreCase(reserva.getEstado()) || "Cancelada".equalsIgnoreCase(reserva.getEstado()))
+                && reserva.getSalas() != null) {
             Salas sala = reserva.getSalas();
             sala.setEstado("Activa");
             salasRepository.save(sala);

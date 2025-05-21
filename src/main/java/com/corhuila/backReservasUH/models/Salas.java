@@ -11,16 +11,16 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "salas")
-public class Salas implements Serializable{
+public class Salas implements Serializable {
 
-     private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     @Id
     @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-     @Column(name = "name_sala", length = 200, nullable = false)
+    @Column(name = "name_sala", length = 200, nullable = false)
     private String name;
 
     @Column(name = "estado", nullable = false)
@@ -50,16 +50,14 @@ public class Salas implements Serializable{
         this.estado = estado;
     }
 
-     public boolean isEstadoValido() {
+    public boolean isEstadoValido() {
         return "Ocupada".equals(estado) ||
                 "Activa".equals(estado) ||
                 "Inactiva".equals(estado);
     }
 
-     public void actualizarEstado(String nuevoEstado) {
+    public void actualizarEstado(String nuevoEstado) {
         this.estado = nuevoEstado;
     }
-
-    
 
 }
