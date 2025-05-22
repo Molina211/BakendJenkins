@@ -104,19 +104,13 @@ public class UsuarioRestController {
     }
 
     @PostMapping("/send-code")
-    public ResponseEntity<Map<String, String>> sendCode(@RequestBody Map<String, String> body) {
+    public ResponseEntity<Void> sendCode(@RequestBody Map<String, String> body) {
         String correo = body.get("correo");
         try {
             usuarioService.enviarCodigoVerificacion(correo);
-
-            Map<String, String> response = new HashMap<>();
-            response.put("mensaje", "Código enviado correctamente a " + correo);
-
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok().build(); // 200 OK sin cuerpo
         } catch (RuntimeException e) {
-            Map<String, String> error = new HashMap<>();
-            error.put("error", e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // 404 sin cuerpo
         }
     }
 
