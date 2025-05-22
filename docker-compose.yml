@@ -5,7 +5,7 @@ services:
     image: miapp
     build: .
     ports:
-      - "8090:8080"
+      - "8443:8443"
     depends_on:
       - mysql
     environment:
